@@ -1,0 +1,24 @@
+.input-group {
+    display: flex;
+    flex-direction: column;    
+
+    align-items: center;
+
+    gap: 2px;
+}
+    .input-group input, .input-group label {
+        cursor: pointer;
+    }
+    .input-group input[type="radio"] {
+        width: 18px;
+        height: 18px;
+
+        accent-color: var(--accent-primary);
+    }
+    .input-group label {
+        color: var(--text-secondary);
+        transition: color 0.3s ease;
+    }
+    .input-group label:hover, .input-group input:checked ~ label, .input-group input:hover ~ label {
+        color: var(--text-primary);
+    }

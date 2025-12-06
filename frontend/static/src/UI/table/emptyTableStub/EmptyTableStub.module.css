@@ -1,0 +1,7 @@
+.empty-history {
+    text-align: center;
+    color: var(--text-secondary);
+    font-style: italic;
+
+    padding: 10px 10px 10px 10px;
+}

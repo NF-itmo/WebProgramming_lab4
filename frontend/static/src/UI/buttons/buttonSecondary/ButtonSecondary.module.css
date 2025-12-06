@@ -1,0 +1,22 @@
+.btn {
+    padding: 16px;
+
+    background-color: transparent;
+    border: 2px solid var(--accent-primary);
+            
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}    
+
+.btn:hover {
+    border-color: var(--accent-secondary);
+    transform: translateY(var(--btn-active-translateY));
+    box-shadow: var(--shadow);
+}

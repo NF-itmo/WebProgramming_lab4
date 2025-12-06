@@ -1,0 +1,15 @@
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+
+    background: var(--bg-tertiary);   
+    
+    border-radius: 8px;
+    overflow: hidden;
+}
+    .submit-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        
+        margin-top: 10px;
+    }    

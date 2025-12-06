@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* Дефолтные настройки стиля текста */
+    font-family: 'fantasy;', sans-serif;
+    color: var(--text-secondary);
+    line-height: 1.6;
+
+    background: var(--bg-primary);
+    
+    min-height: 100vh;
+    padding: 20px;
+
+    /* Расположение элементов */
+    display: grid;
+    justify-items: center;
+    
+    user-select: none;
+}
