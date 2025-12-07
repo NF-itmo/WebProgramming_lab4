@@ -18,12 +18,19 @@ services:
     networks:
       - database_net
 
-  backend:
-    build: ./server
+  jwt-builder:
+    build: ./backend/jwtProcessing
+    volumes:
+      - maven-cache:/root/.m2
+
+  backend1:
+    build: ./backend/authService
     restart: on-failure
     depends_on:
       database:
         condition: service_healthy
+      jwt-builder:
+        condition: service_completed_successfully
     volumes:
       - maven-cache:/root/.m2
     environment:
@@ -32,20 +39,70 @@ services:
       DB_PASSWORD: horse_ate_green_guinea_pig
       JWT_SECRET: mySuperSecretKey12345
       JWT_EXPIRATION_MS: 86_400_000
+    ports:
+      - "5001:8080"
     networks:
       - database_net
       - web_server_net
 
-  frontend:
-    build: ./frontend
+  backend2:
+    build: ./backend/geometryService
     restart: on-failure
     depends_on:
-      - backend
+      database:
+        condition: service_healthy
+      jwt-builder:
+        condition: service_completed_successfully
+    volumes:
+      - maven-cache:/root/.m2
+    environment:
+      DB_URL: postgresql://database:5432/db
+      DB_USER: admin
+      DB_PASSWORD: horse_ate_green_guinea_pig
+      JWT_SECRET: mySuperSecretKey12345
+      JWT_EXPIRATION_MS: 86_400_000
+      JWT_ISSUER: AuthService
     ports:
-      - "80:80"
-      - "443:443"
+      - "5002:8080"
     networks:
+      - database_net
       - web_server_net
+
+  backend3:
+    build: ./backend/historyService
+    restart: on-failure
+    depends_on:
+      database:
+        condition: service_healthy
+      jwt-builder:
+        condition: service_completed_successfully
+    volumes:
+      - maven-cache:/root/.m2
+    environment:
+      DB_URL: postgresql://database:5432/db
+      DB_USER: admin
+      DB_PASSWORD: horse_ate_green_guinea_pig
+      JWT_SECRET: mySuperSecretKey12345
+      JWT_EXPIRATION_MS: 86_400_000
+      JWT_ISSUER: AuthService
+    ports:
+      - "5003:8080"
+    networks:
+      - database_net
+      - web_server_net
+
+  # frontend:
+  #   build: ./frontend
+  #   restart: on-failure
+  #   depends_on:
+  #     - backend1
+  #     - backend2
+  #     - backend3
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   networks:
+  #     - web_server_net
 
 volumes:
   web3_db_data:

@@ -1,0 +1,6 @@
+org/jwtProcessing/JwtConfig.class
+org/jwtProcessing/StrictJwtBuilderFabric.class
+org/jwtProcessing/filter/JwtAuthFilter.class
+org/jwtProcessing/JwtVerifier.class
+org/jwtProcessing/JwtBuilder.class
+org/jwtProcessing/filter/JwtSecured.class
