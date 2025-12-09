@@ -19,18 +19,18 @@ public class PointRepository {
     }
 
     @Transactional
-    public List<Point> getByUserId(int userId, int length, int start) {
-        return entityManager.createQuery("select p from Point p where p.user.id = :userId order by p.timestamp desc", Point.class)
-                .setParameter("userId", userId)
+    public List<Point> getByGroupId(int groupId, int length, int start) {
+        return entityManager.createQuery("select p from Point p where p.group.id = :groupId order by p.timestamp desc", Point.class)
+                .setParameter("groupId", groupId)
                 .setFirstResult(start)
                 .setMaxResults(length)
                 .getResultList();
     }
 
     @Transactional
-    public long getPointsCntByUserId(int userId) {
-        return entityManager.createQuery("select count(p) from Point p where p.user.id = :userId", Long.class)
-                .setParameter("userId", userId)
+    public long getPointsCntByGroupId(int grouId) {
+        return entityManager.createQuery("select count(p) from Point p where p.group.id = :grouId", Long.class)
+                .setParameter("grouId", grouId)
                 .getSingleResult();
     }
 }

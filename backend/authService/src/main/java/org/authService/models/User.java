@@ -6,13 +6,13 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
-@Table(name = "Users", schema = "public")
+@Table(name = "Users", schema = "auth_service")
 @Builder @NoArgsConstructor @AllArgsConstructor
 @Getter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Users_id_gen")
-    @SequenceGenerator(name = "Users_id_gen", sequenceName = "Users_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "Users_id_gen", sequenceName = "Users_id_seq", allocationSize = 1, schema = "auth_service")
     @Column(name = "id", nullable = false)
     private Integer id;
 

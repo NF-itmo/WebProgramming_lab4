@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package history;
+
+service HistoryService {
+  rpc SavePoint(SavePointRequest) returns (SavePointResponse);
+}
+
+message SavePointRequest {
+  float X = 1;
+  float Y = 2;
+  float R = 3;
+  bool isHitted = 4;
+  int32 userId = 5;
+  int32 groupId = 6;
+}
+
+message SavePointResponse {
+  bool isOk = 1;
+  string message = 2;
+}

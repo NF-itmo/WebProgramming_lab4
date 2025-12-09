@@ -135,20 +135,9 @@
                     <driver>h2</driver>
                     <security user-name="sa" password="sa"/>
                 </datasource>
-                <datasource jndi-name="java:/jdbc/PostgresDS"
-                            pool-name="PostgresDS"
-                            enabled="true"
-                            use-java-context="true">
-                    <connection-url>jdbc:postgresql://database:5432/db</connection-url>
-                    <driver>postgresql</driver>
-                    <security user-name="admin" password="horse_ate_green_guinea_pig"/>
-                </datasource>
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
-                    </driver>
-                    <driver name="postgresql" module="org.postgresql">
-                        <driver-class>org.postgresql.Driver</driver-class>
                     </driver>
                 </drivers>
             </datasources>

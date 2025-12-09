@@ -11,13 +11,12 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <class>org.authService.models.User</class>
-        <class>org.authService.models.Point</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="hibernate.globally_quoted_identifiers" value="true"/>
-            <property name="hibernate.default_schema" value="public"/>
+            <property name="hibernate.default_schema" value="auth_service"/>
         </properties>
 
     </persistence-unit>
