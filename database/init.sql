@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS history_service."ResultGroups" (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS history_service."PointPoints" (
+CREATE TABLE IF NOT EXISTS history_service."PointResults" (
   id SERIAL PRIMARY KEY,
   group_id INTEGER NOT NULL REFERENCES history_service."ResultGroups"(id) ON DELETE CASCADE,
   x REAL NOT NULL,

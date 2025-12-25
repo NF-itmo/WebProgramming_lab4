@@ -34,7 +34,7 @@ public class Group {
     private Integer ownerId;
 
     @NotNull
-    @Column(name = "group_name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String groupName;
 
     @ColumnDefault("now()")

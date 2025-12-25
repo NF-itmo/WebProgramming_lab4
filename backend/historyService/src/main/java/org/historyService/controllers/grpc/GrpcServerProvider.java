@@ -17,8 +17,7 @@ public class GrpcServerProvider {
 
     private Server server;
 
-    @Inject
-    private HistoryController historyController;
+    private final HistoryController historyController = new HistoryController();
 
     @PostConstruct
     public void init() {

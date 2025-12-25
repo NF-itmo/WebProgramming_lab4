@@ -9,10 +9,9 @@ import jakarta.inject.Inject;
 import org.historyService.services.HistoryService;
 import org.historyService.services.exceptions.UnauthorizedException;
 
-@ApplicationScoped
 public class HistoryController extends HistoryServiceGrpc.HistoryServiceImplBase {
     @Inject
-    private HistoryService historyService;
+    HistoryService historyService;
 
     @Override
     public void savePoint(SavePointRequest request, StreamObserver<SavePointResponse> responseObserver) {
