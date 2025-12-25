@@ -20,20 +20,15 @@ services:
     networks:
       - database_net
 
-  jwt-builder:
-    build: ./backend/jwtProcessing
-    volumes:
-      - maven-cache:/root/.m2
-
-  backend1:
-    build: ./backend/authService
-    container_name: backend1
+  backend_auth:
+    build: 
+      context: ./backend
+      dockerfile: authService/Dockerfile
+    container_name: backend_auth
     restart: on-failure
     depends_on:
       database:
         condition: service_healthy
-      jwt-builder:
-        condition: service_completed_successfully
     volumes:
       - maven-cache:/root/.m2
     environment:
@@ -48,15 +43,15 @@ services:
       - database_net
       - web_server_net
 
-  backend2:
-    build: ./backend/geometryService
-    container_name: backend2
+  backend_geometry:
+    build: 
+      context: ./backend
+      dockerfile: geometryService/Dockerfile
+    container_name: backend_geometry
     restart: on-failure
     depends_on:
       database:
         condition: service_healthy
-      jwt-builder:
-        condition: service_completed_successfully
     volumes:
       - maven-cache:/root/.m2
     environment:
@@ -72,15 +67,15 @@ services:
       - database_net
       - web_server_net
 
-  backend3:
-    build: ./backend/historyService
-    container_name: backend3
+  backend_history:
+    build: 
+      context: ./backend
+      dockerfile: historyService/Dockerfile
+    container_name: backend_history
     restart: on-failure
     depends_on:
       database:
         condition: service_healthy
-      jwt-builder:
-        condition: service_completed_successfully
     volumes:
       - maven-cache:/root/.m2
     environment:
