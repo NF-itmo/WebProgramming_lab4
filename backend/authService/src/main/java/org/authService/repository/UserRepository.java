@@ -1,11 +1,12 @@
 package org.authService.repository;
 
+import org.authService.models.User;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import org.authService.models.User;
 
 @ApplicationScoped
 public class UserRepository {
@@ -30,6 +31,14 @@ public class UserRepository {
                     .getSingleResult();
         } catch (NoResultException e){
             return null;
+        }
+    }
+
+    @Transactional
+    public void deleteById(int id) {
+        User user = entityManager.find(User.class, id);
+        if (user != null) {
+            entityManager.remove(user);
         }
     }
 }

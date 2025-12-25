@@ -18,6 +18,7 @@ public class GrpcServerProvider {
     private Server server;
 
     private final HistoryController historyController = new HistoryController();
+    private final GroupsController groupsController = new GroupsController();
 
     @PostConstruct
     public void init() {
@@ -25,6 +26,7 @@ public class GrpcServerProvider {
             server = ServerBuilder
                     .forPort(9090)
                     .addService(historyController)
+                    .addService(groupsController)
                     .build()
                     .start();
 

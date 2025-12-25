@@ -1,18 +1,23 @@
 package org.authService.services;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import org.authService.services.exceptions.ConflictException;
-import org.authService.services.exceptions.UnauthorizedException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.authService.models.User;
 import org.authService.repository.UserRepository;
+import org.authService.services.saga.RegistrationSagaOrchestrator;
+import org.authService.services.exceptions.ConflictException;
+import org.authService.services.exceptions.UnauthorizedException;
 import org.jwtProcessing.StrictJwtBuilderFabric;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class AuthService {
     @Inject
     private UserRepository userRepository;
+
+    @Inject
+    private RegistrationSagaOrchestrator registrationSagaOrchestrator;
 
     private final StrictJwtBuilderFabric jwtBuilderFabric = new StrictJwtBuilderFabric("AuthService");
 
@@ -28,17 +33,9 @@ public class AuthService {
     }
 
     public String register(final String login, final String password) throws ConflictException {
-        final User existingUser = userRepository.getByUsername(login);
-        if (existingUser != null) {
-            throw new ConflictException("User already exists");
-        }
-
         final String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        final User user = User.builder()
-                .password(hashedPassword)
-                .username(login)
-                .build();
-        userRepository.save(user);
+
+        final User user = registrationSagaOrchestrator.executeRegistrationSaga(login, hashedPassword);
 
         return jwtBuilderFabric.newTokenBuilder(user.getUsername())
                 .addClaim("uid", user.getId())

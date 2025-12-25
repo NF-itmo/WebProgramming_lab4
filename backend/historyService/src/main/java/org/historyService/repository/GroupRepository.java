@@ -32,6 +32,14 @@ public class GroupRepository {
         return entityManager.find(Group.class, id);
     }
 
+    @Transactional
+    public void deleteByOwnerIdAndGroupName(int userId, String groupName) {
+        entityManager.createQuery("delete from Group g where g.ownerId = :userId and g.groupName = :groupName")
+                .setParameter("userId", userId)
+                .setParameter("groupName", groupName)
+                .executeUpdate();
+    }
+
     public boolean isGroupOwnedByUser(int groupId, int userId) {
         Group group = this.getById(groupId);
         return group != null && group.getOwnerId() == userId;

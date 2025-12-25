@@ -4,8 +4,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.historyService.models.Group;
 import org.historyService.repository.GroupRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -24,6 +22,13 @@ public class GroupsService {
                 .build();
         groupRepository.save(group);
         return group;
+    }
+
+    public void deleteGroup(
+            final int userId,
+            final String groupName
+    ) {
+        groupRepository.deleteByOwnerIdAndGroupName(userId, groupName);
     }
 
     public List<Group> getByUserId(
