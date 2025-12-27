@@ -48,17 +48,17 @@ public class GroupRepository {
 
     @Transactional
     public boolean isGroupOwnedByUser(int userId, int groupId) {
-        logger.debug("Проверка владения: userId={}, groupId={}", userId, groupId);
+        logger.info("Проверка владения: userId={}, groupId={}", userId, groupId);
 
         Group group = this.getById(groupId);
 
         if (group == null) {
-            logger.debug("Группа с id={} не найдена", groupId);
+            logger.info("Группа с id={} не найдена", groupId);
             return false;
         }
 
         boolean owns = Objects.equals(group.getOwnerId(), userId);
-        logger.debug("ownerId группы={}, userId={}, результат проверки={}", group.getOwnerId(), userId, owns);
+        logger.info("ownerId группы={}, userId={}, результат проверки={}", group.getOwnerId(), userId, owns);
 
         return owns;
     }

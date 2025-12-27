@@ -30,21 +30,21 @@ public class HistoryService {
             final int start,
             final int length
     ) throws UnauthorizedException {
-        logger.debug("Getting points for user {} in group {} (start={}, length={})", userId, groupId, start, length);
-        /*if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
+        logger.info("Getting points for user {} in group {} (start={}, length={})", userId, groupId, start, length);
+        if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
             throw new UnauthorizedException("You are not allowed to access this group");
-        }*/
-        return pointRepository.getByGroupId(groupId, start, length);
+        }
+        return pointRepository.getByGroupId(groupId, length, start);
     }
 
     public long getTotal(
             final int userId,
             final int groupId
     ) throws UnauthorizedException {
-        logger.debug("Getting total points for user {} in group {}", userId, groupId);
-        /*if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
+        logger.info("Getting total points for user {} in group {}", userId, groupId);
+        if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
             throw new UnauthorizedException("You are not allowed to access this group");
-        }*/
+        }
         return pointRepository.getPointsCntByGroupId(groupId);
     }
 
@@ -56,10 +56,10 @@ public class HistoryService {
             final int userId,
             final int groupId
     ) throws UnauthorizedException {
-        logger.debug("Saving point for user {} in group {}: X={}, Y={}, R={}, isHitted={}", userId, groupId, X, Y, R, isHitted);
-        /*if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
+        logger.info("Saving point for user {} in group {}: X={}, Y={}, R={}, isHitted={}", userId, groupId, X, Y, R, isHitted);
+        if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
             throw new UnauthorizedException("You are not allowed to access this group");
-        }*/
+        }
         final Group group = Group.builder().id(groupId).build();
         final Point point = Point.builder().x(X).y(Y).r(R).isHitted(isHitted).group(group).build();
         pointRepository.save(point);

@@ -11,10 +11,12 @@ export type Point = {
 
 type PointsState = {
     points: Point[];
+    totalPoints: number
 }
 
 const initialState: PointsState = {
-    points: []
+    points: [],
+    totalPoints: 0
 };
 
 export const pointsSlice = createSlice({
@@ -25,7 +27,8 @@ export const pointsSlice = createSlice({
             const newPoint: Point = {
                 ...action.payload
             };
-            state.points.unshift(newPoint);
+            state.points.unshift(newPoint);  // BAD! VERY BAD!
+            state.totalPoints += 1;
         },
         appendPointsArray: (state, action: PayloadAction<Point[]>) => {
             state.points = state.points.concat(action.payload);
@@ -35,9 +38,12 @@ export const pointsSlice = createSlice({
         },
         fromArray: (state, action: PayloadAction<Point[]>) => {
             state.points = action.payload;
+        },
+        setTotalPointsCount: (state, action: PayloadAction<number>) => {
+            state.totalPoints = action.payload;
         }
     },
 });
 
-export const { addPoint, clearPoints, fromArray, appendPointsArray } = pointsSlice.actions;
+export const { addPoint, clearPoints, fromArray, appendPointsArray, setTotalPointsCount } = pointsSlice.actions;
 export default pointsSlice.reducer;

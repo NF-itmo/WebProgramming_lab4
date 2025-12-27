@@ -27,7 +27,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 
-@Path("/")
+@Path("")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @JwtSecured
@@ -59,7 +59,7 @@ public class HistoryController {
                     ))
                     .toArray(PointHistoryResponse[]::new);
 
-            logger.debug("Retrieved {} points for user {} in group {}", responses.length, userId, groupId);
+            logger.info("Retrieved {} points for user {} in group {}", responses.length, userId, groupId);
             return Response.ok(responses).build();
 
         } catch (UnauthorizedException e){
@@ -75,7 +75,7 @@ public class HistoryController {
     }
 
     @GET
-    @Path("count")
+    @Path("/count")
     public Response getTotal(
             @Context SecurityContext securityContext,
             @Valid @BeanParam GetCountRequestQueryParams queryParams
@@ -87,7 +87,7 @@ public class HistoryController {
 
             final long cnt = historyService.getTotal(userId, groupId);
 
-            logger.debug("Retrieved total count {} for user {} in group {}", cnt, userId, groupId);
+            logger.info("Retrieved total count {} for user {} in group {}", cnt, userId, groupId);
             return Response.ok(new PointsCountResponse(cnt)).build();
         } catch (UnauthorizedException e){
             return Response.status(Response.Status.FORBIDDEN)

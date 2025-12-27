@@ -1,13 +1,6 @@
 package org.historyService.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +31,14 @@ public class Group {
     @Column(name = "name", nullable = false)
     private String groupName;
 
-    @ColumnDefault("now()")
-    @Column(name = "created_at")
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false)
     private OffsetDateTime timestamp;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.timestamp == null) {
+            this.timestamp = OffsetDateTime.now();
+        }
+    }
 }

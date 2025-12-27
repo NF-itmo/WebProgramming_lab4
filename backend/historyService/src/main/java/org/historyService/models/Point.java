@@ -41,7 +41,14 @@ public class Point {
     @Column(name = "is_hitted", nullable = false)
     private boolean isHitted;
 
-    @ColumnDefault("now()")
-    @Column(name = "created_at")
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false)
     private OffsetDateTime timestamp;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.timestamp == null) {
+            this.timestamp = OffsetDateTime.now();
+        }
+    }
 }

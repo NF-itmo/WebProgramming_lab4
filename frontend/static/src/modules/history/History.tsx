@@ -1,115 +1,101 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Table from "../../components/paginatedHistoryTable/PaginatedHistoryTable";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/redux";
-import { fromArray, appendPointsArray } from "../../store/slices/pointSlice";
+import { fromArray, appendPointsArray, setTotalPointsCount, clearPoints } from "../../store/slices/pointSlice";
 import { getHistory } from "./api/getHistory";
 import { getTotalEntities } from "./api/getTotalEntities";
 import useError from "../error/useError";
 
-type props = {
-    rowsPerPage?: number
-}
+type Props = {
+    rowsPerPage?: number;
+};
 
 type HistoryPoint = {
-    timestamp: number,
-    x: number,
-    y: number,
-    r: number,
-    isHitted: boolean
-}
+    timestamp: number;
+    x: number;
+    y: number;
+    r: number;
+    isHitted: boolean;
+};
 
-const History = ({
-    rowsPerPage = 10
-}: props) => {
+const History = ({ rowsPerPage = 10 }: Props) => {
     const dispatch = useAppDispatch();
-    const { points } = useAppSelector((state) => state.points);
+    const { points, totalPoints } = useAppSelector((state) => state.points);
     const { token } = useAppSelector((state) => state.token);
     const { currentGroupId } = useAppSelector((state) => state.group);
     const { showError } = useError();
-    const [getPagesCnt, setPagesCnt] = useState<number>(1);
-    const [getDisplayedPointsStartIdx, setDisplayedPointsStartIdx] = useState<number>(0); 
-    const [getCurrentPagePoints, setCurrentPagePoints] = useState<HistoryPoint[]>([]);
-    const [totalEntities, setTotalEntities] = useState<number>(0);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    // get entities and their total count on group change
     useEffect(() => {
-        if (!currentGroupId) {
-            setTotalEntities(0);
-            setPagesCnt(1);
-            dispatch(fromArray([]));
-            setCurrentPagePoints([]);
-            return;
-        }
+        dispatch(fromArray([]));
+        setCurrentPage(1);
+        dispatch(setTotalPointsCount(0))
+
+        if (currentGroupId === undefined) return;
 
         getTotalEntities({
-            token: token,
+            token,
             groupId: currentGroupId,
             onSuccess: (count) => {
-                setTotalEntities(count);
-                const _pagesCnt = Math.ceil(count / rowsPerPage);
-                setPagesCnt(_pagesCnt > 0 ? _pagesCnt : 1);
+                dispatch(setTotalPointsCount(count))
             },
-            onError: (descr) => showError(descr)
+            onError: showError
+        });
+        getHistory({
+            start: 0,
+            length: rowsPerPage,
+            token,
+            groupId: currentGroupId,
+            onSuccess: (data) => dispatch(fromArray(data)),
+            onError: showError
         });
     }, [currentGroupId, token]);
 
-    // Reset points when group changes
+    // recalc total pages on totalEntities change
     useEffect(() => {
-        if (currentGroupId) {
-            dispatch(fromArray([]));
-            setDisplayedPointsStartIdx(0);
-        }
-    }, [currentGroupId]);
+        setTotalPages(Math.max(1, Math.ceil(totalPoints / rowsPerPage)))
+    }, [Math.ceil(totalPoints/rowsPerPage)])
 
-    useEffect(() => {
-        if (!currentGroupId) {
-            setCurrentPagePoints([]);
-            return;
-        }
-
-        const startIdx = getDisplayedPointsStartIdx;
+    const tableData: HistoryPoint[] = useMemo(() => {
+        const startIdx = (currentPage - 1) * rowsPerPage;
         const endIdx = startIdx + rowsPerPage;
-        
-        if (endIdx > points.length) {
-            const missingPointsCount = endIdx - points.length;
-            getHistory({
-                start: points.length,
-                length: missingPointsCount,
-                token: token,
-                groupId: currentGroupId,
-                onSuccess: (data) => {
-                    dispatch(appendPointsArray(data));
-                },
-                onError: (descr) => showError(descr)
-            });
-        }
 
-        const pagePoints = points.slice(startIdx, endIdx)
-            .map((elem) => ({
-                timestamp: elem.timestamp * 1000, // Convert seconds to milliseconds for display
-                x: elem.x,
-                y: elem.y,
-                r: elem.r,
-                isHitted: elem.isHitted
-            }));
-        
-        setCurrentPagePoints(pagePoints);
-    }, [getDisplayedPointsStartIdx, points, currentGroupId]);
+        return points.slice(startIdx, endIdx).map((p) => ({
+            timestamp: p.timestamp * 1000,
+            x: p.x,
+            y: p.y,
+            r: p.r,
+            isHitted: p.isHitted
+        }));
+    }, [points, currentPage, rowsPerPage]);
 
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
 
-    useEffect(() => {
-        const _pagesCnt = Math.ceil(totalEntities / rowsPerPage);
-        setPagesCnt(_pagesCnt > 0 ? _pagesCnt : 1);
-    }, [totalEntities]);
+        if (currentGroupId === undefined) return;
 
-    const handlePageChange = (pageNumber: number) => {
-        const newStartIdx = (pageNumber - 1) * rowsPerPage;
-        setDisplayedPointsStartIdx(newStartIdx);
+        const startIdx = (page - 1) * rowsPerPage;
+        const endIdx = startIdx + rowsPerPage;
+
+        if (points.length >= endIdx) return;
+
+        getHistory({
+            start: points.length,
+            length: endIdx - points.length,
+            token,
+            groupId: currentGroupId,
+            onSuccess: (data) => dispatch(appendPointsArray(data)),
+            onError: showError
+        });
     };
 
     return (
         <Table
-            tableData={getCurrentPagePoints}
-            totalPagesCnt={getPagesCnt}
+            tableData={tableData}
+            totalPagesCnt={totalPages}
             onPageChange={handlePageChange}
         />
     );

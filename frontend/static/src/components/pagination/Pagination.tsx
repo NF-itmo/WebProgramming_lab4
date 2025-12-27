@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import styles from "./Pagination.module.css";
 import ButtonAccent from "../../UI/buttons/buttonAccent/ButtonAccent";
 
@@ -17,7 +17,7 @@ const Pagination = ({
     onPageChange,
 }: PaginationProps) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-
+  
   return (
     <>
         {children}
