@@ -24,6 +24,7 @@ const History = ({
     const dispatch = useAppDispatch();
     const { points } = useAppSelector((state) => state.points);
     const { token } = useAppSelector((state) => state.token);
+    const { currentGroupId } = useAppSelector((state) => state.group);
     const { showError } = useError();
     const [getPagesCnt, setPagesCnt] = useState<number>(1);
     const [getDisplayedPointsStartIdx, setDisplayedPointsStartIdx] = useState<number>(0); 
@@ -31,8 +32,17 @@ const History = ({
     const [totalEntities, setTotalEntities] = useState<number>(0);
 
     useEffect(() => {
+        if (!currentGroupId) {
+            setTotalEntities(0);
+            setPagesCnt(1);
+            dispatch(fromArray([]));
+            setCurrentPagePoints([]);
+            return;
+        }
+
         getTotalEntities({
             token: token,
+            groupId: currentGroupId,
             onSuccess: (count) => {
                 setTotalEntities(count);
                 const _pagesCnt = Math.ceil(count / rowsPerPage);
@@ -40,10 +50,22 @@ const History = ({
             },
             onError: (descr) => showError(descr)
         });
-    }, []);
+    }, [currentGroupId, token]);
 
+    // Reset points when group changes
+    useEffect(() => {
+        if (currentGroupId) {
+            dispatch(fromArray([]));
+            setDisplayedPointsStartIdx(0);
+        }
+    }, [currentGroupId]);
 
     useEffect(() => {
+        if (!currentGroupId) {
+            setCurrentPagePoints([]);
+            return;
+        }
+
         const startIdx = getDisplayedPointsStartIdx;
         const endIdx = startIdx + rowsPerPage;
         
@@ -53,6 +75,7 @@ const History = ({
                 start: points.length,
                 length: missingPointsCount,
                 token: token,
+                groupId: currentGroupId,
                 onSuccess: (data) => {
                     dispatch(appendPointsArray(data));
                 },
@@ -62,7 +85,7 @@ const History = ({
 
         const pagePoints = points.slice(startIdx, endIdx)
             .map((elem) => ({
-                timestamp: elem.timestamp * 1000,
+                timestamp: elem.timestamp * 1000, // Convert seconds to milliseconds for display
                 x: elem.x,
                 y: elem.y,
                 r: elem.r,
@@ -70,11 +93,11 @@ const History = ({
             }));
         
         setCurrentPagePoints(pagePoints);
-    }, [getDisplayedPointsStartIdx, points]);
+    }, [getDisplayedPointsStartIdx, points, currentGroupId]);
 
 
     useEffect(() => {
-        const _pagesCnt = Math.ceil(totalEntities/ rowsPerPage);
+        const _pagesCnt = Math.ceil(totalEntities / rowsPerPage);
         setPagesCnt(_pagesCnt > 0 ? _pagesCnt : 1);
     }, [totalEntities]);
 

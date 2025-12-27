@@ -1,28 +1,26 @@
 package org.geometryService.controllers.rest;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
-import jakarta.inject.Inject;
-import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import java.time.OffsetDateTime;
+
+import jakarta.ws.rs.*;
 import org.geometryService.controllers.rest.DTO.CheckRequest;
 import org.geometryService.controllers.rest.DTO.CheckResultResponse;
 import org.geometryService.controllers.rest.DTO.ErrorResponse;
 import org.geometryService.services.CheckerService;
 import org.jwtProcessing.filter.JwtSecured;
+import org.jwtProcessing.security.JwtPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.OffsetDateTime;
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 
 
-@Path("/geometry")
+@Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @JwtSecured
@@ -30,17 +28,16 @@ public class CheckerController {
     @Inject
     private CheckerService checkerService;
 
-    private static final Logger logger = LoggerFactory.getLogger(CheckerService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CheckerController.class);
 
     @POST
-    @Path("/check")
+    @Path("check")
     public Response check(
-            @Context ContainerRequestContext requestContext,
+            @Context SecurityContext securityContext,
             @Valid CheckRequest request
     ) {
         try {
-            DecodedJWT token = (DecodedJWT) requestContext.getProperty("jwt");
-            final int userId = token.getClaim("uid").asInt();
+            final int userId = ((JwtPrincipal) securityContext.getUserPrincipal()).getUid();
 
             final OffsetDateTime timestamp = OffsetDateTime.now();
 

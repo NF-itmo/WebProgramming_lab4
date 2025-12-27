@@ -15,7 +15,7 @@ public class HistoryServiceClient {
 
     public HistoryServiceClient() {
         this.channel = ManagedChannelBuilder
-                .forAddress("backend3", 9090)
+                .forAddress("backendHistoryService", 9090)
                 .usePlaintext()
                 .build();
 

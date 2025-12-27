@@ -10,10 +10,14 @@ import org.historyService.repository.PointRepository;
 import org.historyService.services.exceptions.UnauthorizedException;
 
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @ApplicationScoped
 public class HistoryService {
+    private static final Logger logger = LoggerFactory.getLogger(HistoryService.class);
+
     @Inject
     private PointRepository pointRepository;
 
@@ -26,9 +30,10 @@ public class HistoryService {
             final int start,
             final int length
     ) throws UnauthorizedException {
-        if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
+        logger.debug("Getting points for user {} in group {} (start={}, length={})", userId, groupId, start, length);
+        /*if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
             throw new UnauthorizedException("You are not allowed to access this group");
-        }
+        }*/
         return pointRepository.getByGroupId(groupId, start, length);
     }
 
@@ -36,9 +41,10 @@ public class HistoryService {
             final int userId,
             final int groupId
     ) throws UnauthorizedException {
-        if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
+        logger.debug("Getting total points for user {} in group {}", userId, groupId);
+        /*if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
             throw new UnauthorizedException("You are not allowed to access this group");
-        }
+        }*/
         return pointRepository.getPointsCntByGroupId(groupId);
     }
 
@@ -50,9 +56,10 @@ public class HistoryService {
             final int userId,
             final int groupId
     ) throws UnauthorizedException {
-        if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
+        logger.debug("Saving point for user {} in group {}: X={}, Y={}, R={}, isHitted={}", userId, groupId, X, Y, R, isHitted);
+        /*if (!groupRepository.isGroupOwnedByUser(userId, groupId)){
             throw new UnauthorizedException("You are not allowed to access this group");
-        }
+        }*/
         final Group group = Group.builder().id(groupId).build();
         final Point point = Point.builder().x(X).y(Y).r(R).isHitted(isHitted).group(group).build();
         pointRepository.save(point);

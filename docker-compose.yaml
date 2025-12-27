@@ -24,7 +24,7 @@ services:
     build: 
       context: ./backend
       dockerfile: authService/Dockerfile
-    container_name: backend_auth
+    container_name: backendAuthService
     restart: on-failure
     depends_on:
       database:
@@ -37,6 +37,8 @@ services:
       DB_PASSWORD: horse_ate_green_guinea_pig
       JWT_SECRET: mySuperSecretKey12345
       JWT_EXPIRATION_MS: 86_400_000
+      HISTORY_SERVICE_HOST: "backendHistoryService"
+      HISTORY_SERVICE_PORT: 9090
     ports:
       - "5001:8080"
     networks:
@@ -47,7 +49,7 @@ services:
     build: 
       context: ./backend
       dockerfile: geometryService/Dockerfile
-    container_name: backend_geometry
+    container_name: backendGeometryService
     restart: on-failure
     depends_on:
       database:
@@ -71,7 +73,7 @@ services:
     build: 
       context: ./backend
       dockerfile: historyService/Dockerfile
-    container_name: backend_history
+    container_name: backendHistoryService
     restart: on-failure
     depends_on:
       database:
@@ -91,19 +93,15 @@ services:
       - database_net
       - web_server_net
 
-  # frontend:
-  #   build: ./frontend
-  #   container_name: frontend
-  #   restart: on-failure
-  #   depends_on:
-  #     - backend1
-  #     - backend2
-  #     - backend3
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   networks:
-  #     - web_server_net
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: on-failure
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - web_server_net
 
 volumes:
   web4_db_data:

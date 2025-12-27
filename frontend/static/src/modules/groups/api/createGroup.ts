@@ -1,16 +1,17 @@
-export const loginReq = (
-    login: string,
-    password: string,
+export const createGroup = (
+    name: string,
+    token: string,
 
-    onSuccess: (token: string) => void,
+    onSuccess: (groupId: number) => void,
     onError: (descr: string) => void = (e) => console.log(e)
 ) => {
-    fetch('https://localhost/api/auth/login', {
+    fetch('https://localhost/api/history/groups/create', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ login, password })
+        body: JSON.stringify({ groupName: name })
     })
         .then(response => {
             if (!response.ok) {
@@ -19,8 +20,8 @@ export const loginReq = (
             return response.json();
         })
         .then(data => {
-            if (data && data.token) {
-                onSuccess(data.token);
+            if (data && data.groupId) {
+                onSuccess(data.groupId);
             } else {
                 onError('Сервер вернул некорректный ответ');
             }

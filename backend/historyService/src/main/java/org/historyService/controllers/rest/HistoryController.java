@@ -1,14 +1,8 @@
 package org.historyService.controllers.rest;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
-import jakarta.inject.Inject;
-import jakarta.validation.Valid;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import org.historyService.controllers.rest.DTO.*;
+import java.util.List;
+
+import org.historyService.controllers.rest.DTO.ErrorResponse;
 import org.historyService.controllers.rest.DTO.history.GetCountRequestQueryParams;
 import org.historyService.controllers.rest.DTO.history.GetHistoryRequestQueryParams;
 import org.historyService.controllers.rest.DTO.history.PointHistoryResponse;
@@ -17,12 +11,23 @@ import org.historyService.models.Point;
 import org.historyService.services.HistoryService;
 import org.historyService.services.exceptions.UnauthorizedException;
 import org.jwtProcessing.filter.JwtSecured;
+import org.jwtProcessing.security.JwtPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.BeanParam;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 
-@Path("/history")
+@Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @JwtSecured
@@ -34,18 +39,15 @@ public class HistoryController {
 
     @GET
     public Response get(
-            @Context ContainerRequestContext requestContext,
+            @Context SecurityContext securityContext,
             @Valid @BeanParam GetHistoryRequestQueryParams queryParams
     ) {
         try {
-            final DecodedJWT token = (DecodedJWT) requestContext.getProperty("jwt");
-
-            final int userId = token.getClaim("uid").asInt();
+            final int userId = ((JwtPrincipal) securityContext.getUserPrincipal()).getUid();
             final int groupId = queryParams.getGroupId();
 
             final List<Point> points = historyService.get(
                     userId, groupId, queryParams.getStart(), queryParams.getLength());
-
 
             final PointHistoryResponse[] responses = points.stream()
                     .map(p -> new PointHistoryResponse(
@@ -73,15 +75,14 @@ public class HistoryController {
     }
 
     @GET
-    @Path("/count")
+    @Path("count")
     public Response getTotal(
-            @Context ContainerRequestContext requestContext,
+            @Context SecurityContext securityContext,
             @Valid @BeanParam GetCountRequestQueryParams queryParams
     ) {
         try {
-            final DecodedJWT token = (DecodedJWT) requestContext.getProperty("jwt");
+            final int userId = ((JwtPrincipal) securityContext.getUserPrincipal()).getUid();
 
-            final int userId = token.getClaim("uid").asInt();
             final int groupId = queryParams.getGroupId();
 
             final long cnt = historyService.getTotal(userId, groupId);

@@ -1,10 +1,9 @@
-import {soapRequest} from "../../helpers/soap"
-
 type params = {
     token: string,
     x: number,
     y: number,
     r: number,
+    groupId?: number,
 
     onSuccess: (isHitted: boolean, timestamp: number) => void,
     onError?: (descr: string) => void
@@ -15,44 +14,33 @@ export const checkReq = ({
         x,
         y,
         r,
+        groupId,
         onSuccess,
-        onError  = (e) => console.log(e)
+        onError = (e) => console.error(e)
     }: params
 ) => {
-    return soapRequest({
-        url: "https://localhost/api/checker",
-        method: "check",
-        bodyParams: {
-            namespace: "http://checker.services.web3.org/",
-            data: {
-                x: x,
-                y: y,
-                r: r
-            }
+    if (groupId === undefined) return onError('Сначала нужно выбрать группу');
+    
+    fetch(`https://localhost/api/geometry/check`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
         },
-        headerParams: [
-            {
-                namespace: "http://bearer.services.web3.org/",
-                data: {
-                    Authorization: `Bearer ${token}`
-                }
+        body: JSON.stringify({x: x, y: y, r: r, groupId: groupId})
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        ],
-        onSuccess: (result) => {
-            const isHitted = result?.querySelector("result")?.textContent;
-            const timestamp = result?.querySelector("timestamp")?.textContent;
-
-            if (isHitted && timestamp) {
-                return onSuccess(
-                    isHitted === "true",
-                    Number(timestamp)
-                )
-            } 
-            return onError(`Сервер вернул некорректный ответ`)
-        },
-        onError: (status, result) => {
-            const failMsg = result?.innerHTML;
-            return onError(`Неожиданная ошибка - ${status}: ${failMsg ? failMsg : ''}`);
-        }}
-    )
-}
+            return response.json();
+        })
+        .then((data) => {
+            const isHitted = typeof data.result === 'boolean' ? data.result : data.isHitted;
+            const timestamp = typeof data.timestamp === 'number' ? data.timestamp : 0;
+            onSuccess(isHitted, timestamp);
+        })
+        .catch((error) => {
+            onError(error.message || "Failed to check point");
+        });
+};

@@ -1,5 +1,3 @@
-import {soapRequest} from "../../helpers/soap"
-
 export const registerReq = (
     login: string,
     password: string,
@@ -7,25 +5,27 @@ export const registerReq = (
     onSuccess: (token: string) => void,
     onError: (descr: string) => void = (e) => console.log(e)
 ) => {
-    return soapRequest({
-        url: "https://localhost/api/auth",
-        method: "register",
-        bodyParams: {
-            namespace: "http://auth.services.web3.org/",
-            data: {
-                login: login,
-                password: password
+    fetch('https://localhost/api/auth/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ login, password })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
             }
-        },
-        onSuccess: (result) => {
-            const token = result?.querySelector("token")?.textContent;
-
-            if (token) return onSuccess(token)
-            return onError(`Сервер вернул некорректный ответ`)
-        },
-        onError: (status, result) => {
-            const failMsg = result?.innerHTML;
-            return onError(`Неожиданная ошибка - ${status}: ${failMsg ? failMsg : ''}`);
-        }}
-    )
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.token) {
+                onSuccess(data.token);
+            } else {
+                onError('Сервер вернул некорректный ответ');
+            }
+        })
+        .catch(error => {
+            onError(`Неожиданная ошибка: ${error.message}`);
+        });
 }

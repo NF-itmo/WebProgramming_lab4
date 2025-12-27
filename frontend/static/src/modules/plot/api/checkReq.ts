@@ -1,10 +1,9 @@
-import {soapRequest} from "../../helpers/soap"
-
 type params = {
     token: string,
     x: number,
     y: number,
     r: number,
+    groupId?: number,
 
     onSuccess: (isHitted: boolean, timestamp: number) => void,
     onError?: (descr: string) => void
@@ -15,44 +14,37 @@ export const checkReq = ({
         x,
         y,
         r,
+        groupId,
         onSuccess,
-        onError  = (e) => console.log(e)
+        onError = (e) => console.log(e)
     }: params
 ) => {
-    return soapRequest({
-        url: "https://localhost/api/checker",
-        method: "check",
-        bodyParams: {
-            namespace: "http://checker.services.web3.org/",
-            data: {
-                x: x,
-                y: y,
-                r: r
-            }
-        },
-        headerParams: [
-            {
-                namespace: "http://bearer.services.web3.org/",
-                data: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        ],
-        onSuccess: (result) => {
-            const isHitted = result?.querySelector("result")?.textContent;
-            const timestamp = result?.querySelector("timestamp")?.textContent;
+    if (groupId === undefined) return onError('Сначала нужно выбрать группу');
 
-            if (isHitted && timestamp) {
-                return onSuccess(
-                    isHitted === "true",
-                    Number(timestamp)
-                )
-            } 
-            return onError(`Сервер вернул некорректный ответ`)
+    fetch('https://localhost/api/geometry/check', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
         },
-        onError: (status, result) => {
-            const failMsg = result?.innerHTML;
-            return onError(`Неожиданная ошибка - ${status}: ${failMsg ? failMsg : ''}`);
-        }}
-    )
+        body: JSON.stringify({ x: x, y: y, r: r, groupId: groupId })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && typeof data.isHitted === 'boolean' && typeof data.timestamp === 'number') {
+                onSuccess(data.isHitted, data.timestamp);
+            } else if (data && typeof data.result === 'boolean' && typeof data.timestamp === 'number') {
+                onSuccess(data.result, data.timestamp);
+            } else {
+                onError('Сервер вернул некорректный ответ');
+            }
+        })
+        .catch(error => {
+            onError(`Неожиданная ошибка: ${error.message}`);
+        });
 }

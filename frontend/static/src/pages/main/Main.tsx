@@ -8,6 +8,7 @@ import History from "../../modules/history/History";
 import { useAppSelector } from "../../store/hooks/redux";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Groups from "../../modules/groups/Groups";
 
 const Main = () => {
     const { token } = useAppSelector((state) => state.token);
@@ -23,6 +24,7 @@ const Main = () => {
     return (
         <ContentContainer>
             <Header/>
+            <Groups/>
             <Plot/>
             <Form/>
             <History/>

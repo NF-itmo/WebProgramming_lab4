@@ -6,10 +6,11 @@ import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.geometryService.controllers.rest.validators.Step;
 
-@Setter @Getter @AllArgsConstructor
+@Setter @Getter @AllArgsConstructor @NoArgsConstructor
 public class CheckRequest {
     @NotNull
     @DecimalMin(value = "-2.0", message = "x must be >= -2")
@@ -28,5 +29,7 @@ public class CheckRequest {
     @Step(value = 0.5f, message = "r must have a step of 0.5")
     private Float r;
 
+    @NotNull(message = "groupId must be specified")
+    @DecimalMin(value = "0", message = "groupId must be >= -3")
     private Integer groupId;
 }

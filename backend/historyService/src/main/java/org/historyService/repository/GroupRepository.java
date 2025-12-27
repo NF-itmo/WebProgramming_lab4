@@ -4,12 +4,18 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.historyService.controllers.rest.GroupsController;
 import org.historyService.models.Group;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Objects;
 
 @ApplicationScoped
 public class GroupRepository {
+    private static final Logger logger = LoggerFactory.getLogger(GroupRepository.class);
+
     @PersistenceContext(unitName = "primary")
     private EntityManager entityManager;
 
@@ -19,7 +25,7 @@ public class GroupRepository {
     }
 
     @Transactional
-    public List<Group> getByUserId(int userId, int length, int start) {
+    public List<Group> getByUserId(int userId, int start, int length) {
         return entityManager.createQuery("select g from Group g where g.ownerId = :userId order by g.timestamp desc", Group.class)
                 .setParameter("userId", userId)
                 .setFirstResult(start)
@@ -40,8 +46,21 @@ public class GroupRepository {
                 .executeUpdate();
     }
 
-    public boolean isGroupOwnedByUser(int groupId, int userId) {
+    @Transactional
+    public boolean isGroupOwnedByUser(int userId, int groupId) {
+        logger.debug("Проверка владения: userId={}, groupId={}", userId, groupId);
+
         Group group = this.getById(groupId);
-        return group != null && group.getOwnerId() == userId;
+
+        if (group == null) {
+            logger.debug("Группа с id={} не найдена", groupId);
+            return false;
+        }
+
+        boolean owns = Objects.equals(group.getOwnerId(), userId);
+        logger.debug("ownerId группы={}, userId={}, результат проверки={}", group.getOwnerId(), userId, owns);
+
+        return owns;
     }
+
 }

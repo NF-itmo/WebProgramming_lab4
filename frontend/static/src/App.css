@@ -13,7 +13,6 @@ body {
     background: var(--bg-primary);
     
     min-height: 100vh;
-    padding: 20px;
 
     /* Расположение элементов */
     display: grid;

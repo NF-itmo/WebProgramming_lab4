@@ -4,11 +4,12 @@ import history.HistoryServiceGrpc;
 import history.History.SavePointRequest;
 import history.History.SavePointResponse;
 import io.grpc.stub.StreamObserver;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import org.historyService.services.HistoryService;
 import org.historyService.services.exceptions.UnauthorizedException;
 
+@Dependent
 public class HistoryController extends HistoryServiceGrpc.HistoryServiceImplBase {
     @Inject
     HistoryService historyService;

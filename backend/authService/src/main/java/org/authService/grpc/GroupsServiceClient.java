@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 
 @ApplicationScoped
-public class GroupsServiceClient {
+public class GroupsServiceClient{
     private static final Logger logger = LoggerFactory.getLogger(GroupsServiceClient.class);
 
     @Inject

@@ -14,13 +14,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetGroupsRequestQueryParams {
-    @NotNull
-    @NotEmpty(message = "start must be specified")
+    @NotNull(message = "start must be specified")
     @Min(value = 0, message = "start must be >= 0")
     private int start = 0;
 
-    @NotNull
-    @NotEmpty(message = "length must be specified")
+    @NotNull(message = "length must be specified")
     @Min(value = 1, message = "length must be >= 1")
     @Max(value = 10, message = "length must be <= 10")
     private int length = 10;

@@ -3,9 +3,11 @@ package org.historyService.controllers.grpc;
 import groups.GroupsServiceGrpc;
 import groups.Groups;
 import io.grpc.stub.StreamObserver;
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import org.historyService.services.GroupsService;
 
+@Dependent
 public class GroupsController extends GroupsServiceGrpc.GroupsServiceImplBase {
     @Inject
     GroupsService groupsService;

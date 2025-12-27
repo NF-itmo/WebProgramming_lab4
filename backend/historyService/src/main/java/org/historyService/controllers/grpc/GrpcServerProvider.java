@@ -17,8 +17,8 @@ public class GrpcServerProvider {
 
     private Server server;
 
-    private final HistoryController historyController = new HistoryController();
-    private final GroupsController groupsController = new GroupsController();
+    private @Inject HistoryController historyController;
+    private @Inject GroupsController groupsController;
 
     @PostConstruct
     public void init() {

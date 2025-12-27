@@ -1,19 +1,21 @@
 package org.jwtProcessing.filter;
 
+import java.io.IOException;
+
+import org.jwtProcessing.JwtVerifier;
+import org.jwtProcessing.security.JwtSecurityContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+
 import jakarta.annotation.Priority;
-import jakarta.enterprise.context.Dependent;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
-import org.jwtProcessing.JwtVerifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 @Provider
 @JwtSecured
@@ -47,9 +49,13 @@ public class JwtAuthFilter implements ContainerRequestFilter {
             String token = authHeader.substring(BEARER_PREFIX.length()).trim();
             DecodedJWT decodedToken = jwtVerifier.verify(token);
 
-            requestContext.setProperty("jwt", decodedToken);
+            JwtSecurityContext securityContext = new JwtSecurityContext(
+                    decodedToken,
+                    requestContext.getSecurityContext().isSecure()
+            );
+            requestContext.setSecurityContext(securityContext);
             
-            logger.debug("JWT token verified successfully for user: {}", decodedToken.getClaim("sub").asString());
+            logger.debug("JWT token verified successfully for user: {}", decodedToken.getSubject());
         } catch (JWTVerificationException e) {
             logger.warn("JWT verification failed: {}", e.getMessage());
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)

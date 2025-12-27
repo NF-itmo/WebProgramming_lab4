@@ -13,17 +13,16 @@ import org.slf4j.LoggerFactory;
 public class GrpcChannelProvider {
     private static final Logger logger = LoggerFactory.getLogger(GrpcChannelProvider.class);
 
-    private static final String HISTORY_SERVICE_HOST = System.getenv("HISTORY_SERVICE_HOST") != null 
-            ? System.getenv("HISTORY_SERVICE_HOST") 
-            : "localhost";
-    private static final int HISTORY_SERVICE_PORT = System.getenv("HISTORY_SERVICE_PORT") != null 
-            ? Integer.parseInt(System.getenv("HISTORY_SERVICE_PORT")) 
-            : 9090;
+    private static final String HISTORY_SERVICE_HOST = System.getenv()
+            .getOrDefault("HISTORY_SERVICE_HOST", "localhost");
+    private static final int HISTORY_SERVICE_PORT = Integer.parseInt(System.getenv()
+            .getOrDefault("HISTORY_SERVICE_PORT", "9090"));
 
     private ManagedChannel channel;
 
     @PostConstruct
     public void init() {
+        logger.warn("{}:{}", HISTORY_SERVICE_HOST, HISTORY_SERVICE_PORT);
         logger.info("Initializing gRPC channel to {}:{}", HISTORY_SERVICE_HOST, HISTORY_SERVICE_PORT);
         channel = ManagedChannelBuilder
                 .forAddress(HISTORY_SERVICE_HOST, HISTORY_SERVICE_PORT)

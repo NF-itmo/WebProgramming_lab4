@@ -12,6 +12,7 @@ const PlotForm = () => {
 
     const { token } = useAppSelector((state) => state.token);
     const { showError } = useError();
+    const groupId = useAppSelector((state) => state.group.currentGroupId);
 
     return (
         <FromComponent
@@ -24,12 +25,15 @@ const PlotForm = () => {
                     const r = Number(formData.get('R'));
                     const x = Number(formData.get('X'));
                     const y = Number(formData.get('Y'));
+
+                    console.log("PF", groupId);
                     
                     checkReq({
                         token: token,
                         x: x,
                         y: y,
                         r: r,
+                        groupId: groupId,
 
                         onSuccess: (isHitted, timestamp) => {
                             dispatch(addPoint({

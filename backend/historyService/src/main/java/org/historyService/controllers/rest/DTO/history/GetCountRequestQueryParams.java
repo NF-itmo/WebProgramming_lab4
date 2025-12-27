@@ -12,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetCountRequestQueryParams {
-    @NotNull
-    @NotEmpty(message = "groupId must be specified")
+    @NotNull(message = "groupId must be specified")
     private int groupId;
 }

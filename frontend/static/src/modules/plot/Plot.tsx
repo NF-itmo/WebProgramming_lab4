@@ -1,3 +1,4 @@
+import { group } from "console";
 import PlotComponent from "../../components/plot/Plot"
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks/redux";
@@ -14,6 +15,7 @@ const Plot = () => {
     const { currentR } = useAppSelector((state) => state.radius);
     const { token } = useAppSelector((state) => state.token);
     const { showError } = useError();
+    const groupId = useAppSelector((state) => state.group.currentGroupId);
     
     return (
         <PlotComponent
@@ -36,6 +38,7 @@ const Plot = () => {
                         x: nearestX,
                         y: y * currentR,
                         r: currentR,
+                        groupId: groupId,
 
                         onSuccess: (isHitted, timestamp) => {
                             dispatch(addPoint({

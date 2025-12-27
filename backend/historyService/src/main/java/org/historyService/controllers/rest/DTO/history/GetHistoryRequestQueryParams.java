@@ -14,17 +14,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetHistoryRequestQueryParams {
-    @NotNull
-    @NotEmpty(message = "groupId must be specified")
+    @NotNull(message = "groupId must be specified")
     private int groupId;
 
-    @NotNull
-    @NotEmpty(message = "start must be specified")
+    @NotNull(message = "start must be specified")
     @Min(value = 0, message = "start must be >= 0")
     private int start = 0;
 
-    @NotNull
-    @NotEmpty(message = "length must be specified")
+    @NotNull(message = "length must be specified")
     @Min(value = 1, message = "length must be >= 1")
     @Max(value = 100, message = "length must be <= 100")
     private int length = 10;

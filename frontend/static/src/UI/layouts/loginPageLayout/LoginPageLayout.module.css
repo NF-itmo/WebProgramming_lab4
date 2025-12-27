@@ -1,0 +1,21 @@
+.containerWrapper {
+    display: flex;
+
+    min-width: 100vw;
+    min-height: 100vh;
+
+    flex-direction: row-reverse;
+}
+    .container {
+        min-height: 100vh;
+        
+        padding: 30px;
+
+        background: var(--bg-secondary);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        gap: 10px;
+    }

@@ -6,6 +6,7 @@
     gap: 10px;
 
     padding: 5px;
-
-    min-width: 400px;
+    
+    width: 400px;
+    max-width: 100%;
 }

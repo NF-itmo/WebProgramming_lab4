@@ -20,4 +20,3 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
                 .build();
     }
 }
-
