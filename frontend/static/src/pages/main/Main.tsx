@@ -15,12 +15,11 @@ const Main = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-            if (token === "") {
-                navigate("/login")
-            }
-        },
-        [token]
-    )
+        if (token === "") {
+            navigate("/login")
+        }
+    },[token])
+
     return (
         <ContentContainer>
             <Header/>

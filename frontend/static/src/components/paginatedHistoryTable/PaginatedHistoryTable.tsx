@@ -15,6 +15,7 @@ type Props = {
         r: number;
         isHitted: boolean;
     }[];
+    currentPage?: number
     rowsPerPage?: number,
     onPageChange?: (pageNumber: number) => void,
     totalPagesCnt?: number
@@ -24,12 +25,9 @@ const HistoryTable = (
     {
         tableData = [],
         onPageChange = () => {},
-        totalPagesCnt = 1
+        totalPagesCnt = 1,
+        currentPage = 1
     }: Props) => {
-    const [page, setPage] = useState(1);
-    useEffect(() => {
-        onPageChange(page)
-    }, [page])
 
     return (
         <div className={styles["history-section"]}>
@@ -37,8 +35,8 @@ const HistoryTable = (
 
             <Pagination
                 totalPages={totalPagesCnt}
-                currentPage={page}
-                onPageChange={setPage}
+                currentPage={currentPage}
+                onPageChange={onPageChange}
             >
                 <table className={styles["history-table"]}>
                     <thead>

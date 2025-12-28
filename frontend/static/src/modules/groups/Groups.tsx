@@ -23,10 +23,10 @@ const Groups = () => {
 
                     if (data.length !== 0){
                         dispatch(setCurrentGroupId({ id: data[0].groupId}));
-                    } 
+                    }
                 }
             })
-        }, []
+        }, [token]
     )
     
     const handleCreateGroup = (groupName: string) => {

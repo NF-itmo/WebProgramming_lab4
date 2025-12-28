@@ -30,7 +30,7 @@ const History = ({ rowsPerPage = 10 }: Props) => {
 
     // get entities and their total count on group change
     useEffect(() => {
-        dispatch(fromArray([]));
+        dispatch(clearPoints());
         setCurrentPage(1);
         dispatch(setTotalPointsCount(0))
 
@@ -73,8 +73,6 @@ const History = ({ rowsPerPage = 10 }: Props) => {
     }, [points, currentPage, rowsPerPage]);
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-
         if (currentGroupId === undefined) return;
 
         const startIdx = (page - 1) * rowsPerPage;
@@ -90,6 +88,8 @@ const History = ({ rowsPerPage = 10 }: Props) => {
             onSuccess: (data) => dispatch(appendPointsArray(data)),
             onError: showError
         });
+
+        setCurrentPage(page);
     };
 
     return (
@@ -97,6 +97,7 @@ const History = ({ rowsPerPage = 10 }: Props) => {
             tableData={tableData}
             totalPagesCnt={totalPages}
             onPageChange={handlePageChange}
+            currentPage={currentPage}
         />
     );
 };
