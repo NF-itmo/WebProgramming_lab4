@@ -5,17 +5,19 @@ RUN apk update && \
 COPY ./gen_certs.sh .
 RUN source ./gen_certs.sh
 
-FROM node:lts-alpine AS build-main-page
+FROM node:lts-alpine AS build-front
 WORKDIR /app
 
-COPY ./static .
+COPY ./monorepo .
 RUN npm install && npm run build
 
 FROM nginx:latest
 
 COPY ./nginx-conf/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-certs /nginx-conf/certs /etc/nginx/certs
-COPY --from=build-main-page /app/build /var/www/html/
+COPY --from=build-front /app/services/login/dist/ /var/www/html/login/
+COPY --from=build-front /app/services/host/dist/ /var/www/html/host/
+COPY --from=build-front /app/services/main/dist/ /var/www/html/main/
 
 EXPOSE 80
 EXPOSE 443

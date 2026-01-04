@@ -1,0 +1,53 @@
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store, useAppSelector } from "@packages/shared";
+import React from 'react';
+import "./themes/default.css"
+import "./App.css"
+import { ErrorProvider } from '@packages/shared';
+
+const LoginApp = React.lazy(() =>
+  import('login/LoginApp').catch(() => ({
+    default: () => <div>Error loading Login app</div>,
+  }))
+);
+
+const MainApp = React.lazy(() =>
+  import('main/MainApp').catch(() => ({
+    default: () => <div>Error loading Main app</div>,
+  }))
+);
+
+const App = () =>  {
+  const { token } = useAppSelector((state) => state.token);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (token === '') {
+      navigate('/login');
+    }
+  }, [token, navigate]);
+
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          <React.Suspense fallback={<div>Loading Login...</div>}>
+            <LoginApp />
+          </React.Suspense>
+        }
+      />
+      <Route
+        path="/*"
+        element={
+          <React.Suspense fallback={<div>Loading Main App...</div>}>
+            <MainApp />
+          </React.Suspense>
+        }
+      />
+    </Routes>
+  );
+}
+
+export default App;

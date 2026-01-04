@@ -1,0 +1,19 @@
+{
+  "name": "@packages/shared",
+  "version": "1.0.1",
+  "description": "Shared utilities, types, and store for micro-frontends",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "main": "./src/index.ts",
+  "peerDependencies": {
+    "@reduxjs/toolkit": "^2.10.1",
+    "react": "^19.2.0",
+    "react-redux": "^9.2.0",
+    "redux": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-typescript": "^7.28.5",
+    "@types/react": "^19.2.2"
+  }
+}
