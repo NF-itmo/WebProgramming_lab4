@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package groups;
+
+service GroupsService {
+  rpc createGroup(CreateGroupRequest) returns (CreateGroupResponse);
+  rpc deleteGroup(DeleteGroupRequest) returns (DeleteGroupResponse);
+}
+
+message CreateGroupRequest {
+  int32 userId = 1;
+  string groupName = 2;
+}
+
+message CreateGroupResponse {
+  bool isOk = 1;
+  string message = 2;
+}
+
+message DeleteGroupRequest {
+  int32 userId = 1;
+  string groupName = 2;
+}
+
+message DeleteGroupResponse {
+  bool isOk = 1;
+  string message = 2;
+}

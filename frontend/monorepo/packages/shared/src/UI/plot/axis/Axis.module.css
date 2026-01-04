@@ -1,0 +1,6 @@
+.svg-cord-line {
+    stroke: var(--svg-axis-primary);
+}
+.svg-cord-arrow {
+    fill: var(--svg-axis-primary);
+}

@@ -1,0 +1,4 @@
+.svg-fill-area {
+    fill: var(--svg-fill-area);
+    fill-opacity: 0.7;
+}

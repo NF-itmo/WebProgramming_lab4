@@ -1,0 +1,26 @@
+.form-row {
+    display: contents;
+}      
+    .row-label {
+        padding: 20px;
+        background: oklch(30% 0.06 260);  
+
+        display: flex;
+        align-items: center;
+
+        font-weight: 600;
+        color: var(--accent-primary);
+        border-bottom: 1px solid var(--border-color);
+    }    
+        .row-label p {
+            color: var(--text-secondary);
+        }    
+    .row-input {
+        padding: 20px;
+        background: var(--bg-tertiary);  
+
+        display: inline-flex;
+        gap: 3%;  
+
+        border-bottom: 1px solid var(--border-color);
+    }
