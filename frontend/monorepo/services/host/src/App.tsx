@@ -1,5 +1,5 @@
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useAppSelector } from "@packages/shared";
+import { Loader, useAppSelector } from "@packages/shared";
 import React from 'react';
 import "./themes/default.css"
 import "./App.css"
@@ -31,7 +31,7 @@ const App = () =>  {
       <Route
         path="/login"
         element={
-          <React.Suspense fallback={<div>Loading Login...</div>}>
+          <React.Suspense fallback={<Loader text={"Loading Login..."}/>}>
             <LoginApp />
           </React.Suspense>
         }
@@ -39,7 +39,7 @@ const App = () =>  {
       <Route
         path="/*"
         element={
-          <React.Suspense fallback={<div>Loading Main App...</div>}>
+          <React.Suspense fallback={<Loader text={"Loading Main App..."}/>}>
             <MainApp />
           </React.Suspense>
         }

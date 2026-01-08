@@ -1,7 +1,7 @@
 import "./Main.css";
 
 import Form from "../../modules/plotForm/PlotForm";
-import { ColumnLayout as ContentContainer } from "@packages/shared";
+import { ColumnLayout as ContentContainer, Loader } from "@packages/shared";
 import Header from "../../components/header/Header";
 import React from "react";
 
@@ -28,17 +28,17 @@ const Main = () => {
       
       <Header/>
 
-      <React.Suspense fallback={<div>Loading Groups...</div>}>
+      <React.Suspense fallback={<Loader text={"Loading Groups..."}/>}>
         <GroupsComponent/>
       </React.Suspense>
 
-      <React.Suspense fallback={<div>Loading Plot...</div>}>
+      <React.Suspense fallback={<Loader text={"Loading Plot..."}/>}>
         <PlotComponent/>
       </React.Suspense>
 
       <Form/>
       
-      <React.Suspense fallback={<div>Loading History...</div>}>
+      <React.Suspense fallback={<Loader text={"Loading History..."}/>}>
         <HistoryComponent/>
       </React.Suspense>
 
