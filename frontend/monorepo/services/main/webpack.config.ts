@@ -1,11 +1,12 @@
 import { BuildOptions, buildWebpack } from '@packages/build-config';
 import path from 'path';
-import ModuleFederationPlugin from '@module-federation/enhanced';
 import webpack from 'webpack';
 
 type EnvVariables = {}
 
 module.exports = (env: EnvVariables, argv: BuildOptions) => {
+  const isDev = argv.mode === 'development'
+
   const config: webpack.Configuration = buildWebpack({
     mode: argv.mode || 'development',
     port: 3002,
@@ -27,6 +28,11 @@ module.exports = (env: EnvVariables, argv: BuildOptions) => {
       filename: 'remoteEntry.js',
       exposes: {
         './MainApp': './src/MainApp',
+      },
+      remotes: {
+        plotComponent: isDev ? 'plotComponent@http://localhost:3003/remoteEntry.js' : `plotComponent@https://localhost/plot-mf/remoteEntry.js`,
+        historyComponent: isDev ? 'historyComponent@http://localhost:3004/remoteEntry.js' : `historyComponent@https://localhost/history-mf/remoteEntry.js`,
+        groupComponent: isDev ? 'groupComponent@http://localhost:3005/remoteEntry.js' : `groupComponent@https://localhost/group-mf/remoteEntry.js`
       },
       shared: {
         react: {

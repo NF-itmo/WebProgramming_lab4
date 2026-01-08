@@ -1,10 +1,8 @@
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store, useAppSelector } from "@packages/shared";
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useAppSelector } from "@packages/shared";
 import React from 'react';
 import "./themes/default.css"
 import "./App.css"
-import { ErrorProvider } from '@packages/shared';
 
 const LoginApp = React.lazy(() =>
   import('login/LoginApp').catch(() => ({
