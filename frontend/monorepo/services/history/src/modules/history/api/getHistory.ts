@@ -1,7 +1,6 @@
 type Params = {
     start: number;
     length: number;
-    token: string;
     groupId?: number;
     onSuccess: (data: Result[]) => void;
     onError?: (descr: string) => void;
@@ -18,7 +17,6 @@ type Result = {
 export const getHistory = ({
     start,
     length,
-    token,
     groupId,
     onSuccess,
     onError = (e) => console.error(e)
@@ -28,8 +26,7 @@ export const getHistory = ({
     fetch(url, {
         method: "GET",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Content-Type": "application/json"
         }
     })
         .then((response) => {

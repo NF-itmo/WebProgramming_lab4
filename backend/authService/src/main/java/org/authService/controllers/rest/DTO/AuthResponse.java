@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenResponse {
-    private String token;
+public class AuthResponse {
+    private String message;
 }

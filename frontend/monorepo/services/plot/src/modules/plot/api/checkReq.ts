@@ -1,5 +1,4 @@
 type params = {
-    token: string,
     x: number,
     y: number,
     r: number,
@@ -10,7 +9,6 @@ type params = {
 }
 
 export const checkReq = ({
-        token,
         x,
         y,
         r,
@@ -24,7 +22,6 @@ export const checkReq = ({
     fetch('https://localhost/api/geometry/check', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ x: x, y: y, r: r, groupId: groupId })

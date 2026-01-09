@@ -21,7 +21,6 @@ type HistoryPoint = {
 const History = ({ rowsPerPage = 10 }: Props) => {
     const dispatch = useAppDispatch();
     const { points, totalPoints } = useAppSelector((state) => state.points);
-    const { token } = useAppSelector((state) => state.token);
     const { currentGroupId } = useAppSelector((state) => state.group);
     const { showError } = useError();
 
@@ -36,7 +35,6 @@ const History = ({ rowsPerPage = 10 }: Props) => {
         if (currentGroupId === undefined) return;
 
         getTotalEntities({
-            token,
             groupId: currentGroupId,
             onSuccess: (count) => {
                 dispatch(setTotalPointsCount(count))
@@ -46,12 +44,11 @@ const History = ({ rowsPerPage = 10 }: Props) => {
         getHistory({
             start: 0,
             length: rowsPerPage,
-            token,
             groupId: currentGroupId,
             onSuccess: (data) => dispatch(fromArray(data)),
             onError: showError
         });
-    }, [currentGroupId, token]);
+    }, [currentGroupId]);
 
     // recalc total pages on totalEntities change
     useEffect(() => {
@@ -82,7 +79,6 @@ const History = ({ rowsPerPage = 10 }: Props) => {
         getHistory({
             start: points.length,
             length: endIdx - points.length,
-            token,
             groupId: currentGroupId,
             onSuccess: (data) => dispatch(appendPointsArray(data)),
             onError: showError

@@ -39,6 +39,7 @@ services:
       JWT_EXPIRATION_MS: 86_400_000
       HISTORY_SERVICE_HOST: "backendHistoryService"
       HISTORY_SERVICE_PORT: 9090
+      JWT_ISSUER: AuthService
     ports:
       - "5001:8080"
     networks:

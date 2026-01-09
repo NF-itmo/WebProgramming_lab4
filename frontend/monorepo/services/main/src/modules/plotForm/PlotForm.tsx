@@ -9,7 +9,6 @@ import { useError } from "@packages/shared";
 const PlotForm = () => {
     const dispatch = useAppDispatch();
 
-    const { token } = useAppSelector((state) => state.token);
     const { showError } = useError();
     const groupId = useAppSelector((state) => state.group?.currentGroupId);
 
@@ -28,7 +27,6 @@ const PlotForm = () => {
                     console.log("PF", groupId);
                     
                     checkReq({
-                        token: token,
                         x: x,
                         y: y,
                         r: r,

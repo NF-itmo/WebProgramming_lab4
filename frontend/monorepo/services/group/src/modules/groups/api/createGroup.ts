@@ -1,6 +1,5 @@
 export const createGroup = (
     name: string,
-    token: string,
 
     onSuccess: (groupId: number) => void,
     onError: (descr: string) => void = (e) => console.log(e)
@@ -8,7 +7,6 @@ export const createGroup = (
     fetch('https://localhost/api/history/groups/create', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ groupName: name })

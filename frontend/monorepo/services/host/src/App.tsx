@@ -3,6 +3,7 @@ import { Loader, useAppSelector } from "@packages/shared";
 import React from 'react';
 import "./themes/default.css"
 import "./App.css"
+import { validateReq } from './api/vaiidateReq';
 
 const LoginApp = React.lazy(() =>
   import('login/LoginApp').catch(() => ({
@@ -17,14 +18,13 @@ const MainApp = React.lazy(() =>
 );
 
 const App = () =>  {
-  const { token } = useAppSelector((state) => state.token);
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (token === '') {
-      navigate('/login');
-    }
-  }, [token, navigate]);
+    validateReq({
+      onUnauthorized: () => navigate('/login')
+    })
+  }, []);
 
   return (
     <Routes>

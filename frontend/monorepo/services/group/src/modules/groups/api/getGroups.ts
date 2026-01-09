@@ -6,7 +6,6 @@ type groupItem = {
 type params = {
     start?: number,
     length?: number,
-    token: string,
 
     onSuccess: (response: groupItem[]) => void,
     onError?: (descr: string) => void
@@ -14,7 +13,6 @@ type params = {
 
 export const getGroups = (
     {
-        token,
         start = 0,
         length = 10,
         onSuccess,
@@ -24,7 +22,6 @@ export const getGroups = (
     fetch(`https://localhost/api/history/groups?start=${start}&length=${length}`, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         }
     })

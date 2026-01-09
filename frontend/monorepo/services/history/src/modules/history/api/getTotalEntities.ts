@@ -19,8 +19,7 @@ export const getTotalEntities = ({
     fetch(url, {
         method: "GET",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Content-Type": "application/json"
         }
     })
         .then((response) => {

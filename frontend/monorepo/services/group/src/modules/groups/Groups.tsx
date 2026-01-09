@@ -8,14 +8,12 @@ import { useError } from "@packages/shared";
 
 const Groups = () => {
     const dispatch = useAppDispatch();
-    const { token } = useAppSelector((state) => state.token);
     const { currentGroupId, groups } = useAppSelector((state) => state.group);
     const { showError } = useError();
 
     useEffect(
         () => {
             getGroups({
-                token: token,
                 onSuccess: (data: {groupId: number, groupName: string}[]) =>  {
                     dispatch(clearGroups())
                     dispatch(setGroups(data))
@@ -25,7 +23,7 @@ const Groups = () => {
                     }
                 }
             })
-        }, [token]
+        }, []
     )
     
     const handleCreateGroup = (groupName: string) => {
@@ -36,7 +34,6 @@ const Groups = () => {
 
         createGroup(
             groupName.trim(),
-            token,
             (groupId) => {
                 dispatch(addGroup({groupId: groupId, groupName: groupName.trim()}))
                 dispatch(setCurrentGroupId({ id: groupId}));
