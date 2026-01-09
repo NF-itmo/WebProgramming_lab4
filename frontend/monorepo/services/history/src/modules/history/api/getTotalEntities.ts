@@ -1,12 +1,10 @@
 type Params = {
-    token: string;
     groupId?: number;
     onSuccess: (count: number) => void;
     onError?: (descr: string) => void;
 };
 
 export const getTotalEntities = ({
-    token,
     groupId,
     onSuccess,
     onError = (e) => console.error(e)
