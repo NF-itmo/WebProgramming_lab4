@@ -32,7 +32,8 @@ module.exports = (env: EnvVariables, argv: BuildOptions) => {
       remotes: {
         plotComponent: isDev ? 'plotComponent@http://localhost:3003/remoteEntry.js' : `plotComponent@https://localhost/plot-mf/remoteEntry.js`,
         historyComponent: isDev ? 'historyComponent@http://localhost:3004/remoteEntry.js' : `historyComponent@https://localhost/history-mf/remoteEntry.js`,
-        groupComponent: isDev ? 'groupComponent@http://localhost:3005/remoteEntry.js' : `groupComponent@https://localhost/group-mf/remoteEntry.js`
+        groupComponent: isDev ? 'groupComponent@http://localhost:3005/remoteEntry.js' : `groupComponent@https://localhost/group-mf/remoteEntry.js`,
+        topbarComponent: isDev ? 'topbarComponent@http://localhost:3006/remoteEntry.js' : `topbarComponent@https://localhost/topbar-mf/remoteEntry.js`
       },
       shared: {
         react: {

@@ -1,3 +1,5 @@
+import { getCsrfToken } from "@packages/shared";
+
 type Params = {
     start: number;
     length: number;
@@ -26,7 +28,8 @@ export const getHistory = ({
     fetch(url, {
         method: "GET",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'X-CSRF-Token': getCsrfToken()
         }
     })
         .then((response) => {

@@ -28,6 +28,7 @@ const GroupSelector = (
             newGroupName
         );
         setLoading(false);
+        setShowCreateForm(false);
     }
     const handleGroupSelection = (groupId: number) => {
         return () => {

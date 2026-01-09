@@ -1,0 +1,11 @@
+.option {
+  padding: 4px 4px;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.option:hover {
+  background-color: var(--bg-tertiary);
+}
