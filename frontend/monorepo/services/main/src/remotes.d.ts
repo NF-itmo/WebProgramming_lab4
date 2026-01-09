@@ -15,3 +15,10 @@ declare module 'historyComponent/Main' {
   const History: ComponentType;
   export default History;
 }
+
+
+declare module 'topbarComponent/Main' {
+  import { ComponentType } from 'react';
+  const Topbar: ComponentType;
+  export default Topbar;
+}

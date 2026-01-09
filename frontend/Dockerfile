@@ -21,6 +21,7 @@ COPY --from=build-front /app/services/main/dist/ /var/www/html/main/
 COPY --from=build-front /app/services/plot/dist/ /var/www/html/plot/
 COPY --from=build-front /app/services/group/dist/ /var/www/html/group/
 COPY --from=build-front /app/services/history/dist/ /var/www/html/history/
+COPY --from=build-front /app/services/topbar/dist/ /var/www/html/topbar/
 
 EXPOSE 80
 EXPOSE 443

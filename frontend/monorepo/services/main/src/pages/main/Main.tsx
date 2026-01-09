@@ -1,9 +1,10 @@
 import "./Main.css";
 
 import Form from "../../modules/plotForm/PlotForm";
-import { ColumnLayout as ContentContainer, Loader } from "@packages/shared";
+import { Loader } from "@packages/shared";
 import Header from "../../components/header/Header";
 import React from "react";
+import MainPageSkeleton from "../../UI/mainPageSkeleton/MainPageSkeleton";
 
 const PlotComponent = React.lazy(() =>
   import('plotComponent/Main').catch(() => ({
@@ -22,27 +23,41 @@ const GroupsComponent = React.lazy(() =>
   }))
 );
 
+const TopbarComponent = React.lazy(() =>
+  import('topbarComponent/Main').catch(() => ({
+    default: () => <div>Error loading Topbar component</div>,
+  }))
+);
+
+
 const Main = () => {
   return (
-    <ContentContainer>
-      
-      <Header/>
+    <MainPageSkeleton
+      header = {
+        <React.Suspense fallback={<Loader text={"Loading Topbar..."}/>}>
+          <TopbarComponent/>
+        </React.Suspense>
+      }
+      body = {
+        <>
+          <Header/>
 
-      <React.Suspense fallback={<Loader text={"Loading Groups..."}/>}>
-        <GroupsComponent/>
-      </React.Suspense>
+          <React.Suspense fallback={<Loader text={"Loading Groups..."}/>}>
+            <GroupsComponent/>
+          </React.Suspense>
 
-      <React.Suspense fallback={<Loader text={"Loading Plot..."}/>}>
-        <PlotComponent/>
-      </React.Suspense>
+          <React.Suspense fallback={<Loader text={"Loading Plot..."}/>}>
+            <PlotComponent/>
+          </React.Suspense>
 
-      <Form/>
-      
-      <React.Suspense fallback={<Loader text={"Loading History..."}/>}>
-        <HistoryComponent/>
-      </React.Suspense>
+          <Form/>
 
-    </ContentContainer>
+          <React.Suspense fallback={<Loader text={"Loading History..."}/>}>
+            <HistoryComponent/>
+          </React.Suspense>
+        </>
+      }
+    />
   );
 }
 

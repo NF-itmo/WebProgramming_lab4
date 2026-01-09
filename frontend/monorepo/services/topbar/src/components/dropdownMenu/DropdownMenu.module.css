@@ -1,0 +1,33 @@
+.dropdown {
+  position: relative;
+  height: 100%;
+}
+
+.dropbtn {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  height: 100%;
+  padding: 0 10px;
+  cursor: pointer;
+
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.dropbtn:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.active {
+  background-color: var(--bg-tertiary);
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: var(--bg-secondary);
+  min-width: 120px;
+  box-shadow: var(--shadow);
+}

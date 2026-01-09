@@ -5,11 +5,9 @@ import webpack from 'webpack';
 type EnvVariables = {}
 
 module.exports = (env: EnvVariables, argv: BuildOptions) => {
-  const isDev = argv.mode === 'development'
-
   const config: webpack.Configuration = buildWebpack({
     mode: argv.mode || 'development',
-    port: 3002,
+    port: 3006,
     paths: {
       entry: path.resolve(__dirname, 'src/index'),
       html: path.resolve(__dirname, 'public/index.html'),
@@ -24,16 +22,10 @@ module.exports = (env: EnvVariables, argv: BuildOptions) => {
 
   config.plugins.push(
     new webpack.container.ModuleFederationPlugin({
-      name: 'main',
+      name: 'topbarComponent',
       filename: 'remoteEntry.js',
       exposes: {
-        './MainApp': './src/MainApp',
-      },
-      remotes: {
-        plotComponent: isDev ? 'plotComponent@http://localhost:3003/remoteEntry.js' : `plotComponent@https://localhost/plot-mf/remoteEntry.js`,
-        historyComponent: isDev ? 'historyComponent@http://localhost:3004/remoteEntry.js' : `historyComponent@https://localhost/history-mf/remoteEntry.js`,
-        groupComponent: isDev ? 'groupComponent@http://localhost:3005/remoteEntry.js' : `groupComponent@https://localhost/group-mf/remoteEntry.js`,
-        topbarComponent: isDev ? 'topbarComponent@http://localhost:3006/remoteEntry.js' : `topbarComponent@https://localhost/topbar-mf/remoteEntry.js`
+        './Main': './src/Main',
       },
       shared: {
         react: {
