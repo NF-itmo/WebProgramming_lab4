@@ -3,6 +3,7 @@ package org.geometryService.controllers.rest;
 import java.time.OffsetDateTime;
 
 import jakarta.ws.rs.*;
+import org.csrfSecurity.CsrfSecured;
 import org.geometryService.controllers.rest.DTO.CheckRequest;
 import org.geometryService.controllers.rest.DTO.CheckResultResponse;
 import org.geometryService.controllers.rest.DTO.ErrorResponse;
@@ -24,6 +25,7 @@ import jakarta.ws.rs.core.SecurityContext;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @JwtSecured
+@CsrfSecured
 public class CheckerController {
     @Inject
     private CheckerService checkerService;

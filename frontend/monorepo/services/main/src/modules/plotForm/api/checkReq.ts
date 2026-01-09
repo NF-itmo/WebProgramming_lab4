@@ -22,7 +22,8 @@ export const checkReq = ({
     fetch(`https://localhost/api/geometry/check`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'X-CSRF-Token': getCsrfToken()
         },
         body: JSON.stringify({x: x, y: y, r: r, groupId: groupId})
     })

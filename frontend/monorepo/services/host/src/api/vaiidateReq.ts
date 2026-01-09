@@ -1,3 +1,5 @@
+import { getCsrfToken } from "@packages/shared";
+
 type params = {
     onSuccess?: () => void,
     onUnauthorized?: () => void,
@@ -11,7 +13,10 @@ export const validateReq = ({
     }: params
 ) => {
     fetch('https://localhost/api/auth/validate', {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'X-CSRF-Token': getCsrfToken()
+        }
     })
         .then(response => {
             if (response.status === 401) {

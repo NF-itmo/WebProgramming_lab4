@@ -15,6 +15,7 @@
         <module>authService</module>
         <module>geometryService</module>
         <module>historyService</module>
+        <module>csrfSecurity</module>
     </modules>
 
     <properties>

@@ -7,10 +7,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="historyService" />
+        <module name="csrfSecurity" />
         <module name="geometryService" />
         <module name="jwtProcessing" />
         <module name="authService" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="csrfProcessing" target="22" />
+    </bytecodeTargetLevel>
   </component>
 </project>

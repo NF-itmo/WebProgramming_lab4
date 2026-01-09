@@ -1,3 +1,5 @@
+import { getCsrfToken } from "@packages/shared";
+
 type Params = {
     groupId?: number;
     onSuccess: (count: number) => void;
@@ -17,7 +19,8 @@ export const getTotalEntities = ({
     fetch(url, {
         method: "GET",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'X-CSRF-Token': getCsrfToken()
         }
     })
         .then((response) => {

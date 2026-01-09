@@ -1,3 +1,5 @@
+import { getCsrfToken } from "@packages/shared";
+
 export const createGroup = (
     name: string,
 
@@ -7,7 +9,8 @@ export const createGroup = (
     fetch('https://localhost/api/history/groups/create', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': getCsrfToken()
         },
         body: JSON.stringify({ groupName: name })
     })

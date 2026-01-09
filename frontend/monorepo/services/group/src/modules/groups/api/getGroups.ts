@@ -1,3 +1,5 @@
+import { getCsrfToken } from "@packages/shared"
+
 type groupItem = {
     groupId: number,
     groupName: string
@@ -22,7 +24,8 @@ export const getGroups = (
     fetch(`https://localhost/api/history/groups?start=${start}&length=${length}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': getCsrfToken()
         }
     })
         .then(response => {

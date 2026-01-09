@@ -2,6 +2,7 @@ package org.historyService.controllers.rest;
 
 import java.util.List;
 
+import org.csrfSecurity.CsrfSecured;
 import org.historyService.controllers.rest.DTO.ErrorResponse;
 import org.historyService.controllers.rest.DTO.groups.CreateGroupResponse;
 import org.historyService.controllers.rest.DTO.groups.CreateGroupsRequest;
@@ -31,6 +32,7 @@ import jakarta.ws.rs.core.SecurityContext;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @JwtSecured
+@CsrfSecured
 public class GroupsController {
     @Inject
     private GroupsService groupsService;
