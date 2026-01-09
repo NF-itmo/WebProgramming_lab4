@@ -1,6 +1,5 @@
 import { BuildOptions, buildWebpack } from '@packages/build-config';
 import path from 'path';
-import ModuleFederationPlugin from '@module-federation/enhanced';
 import webpack from 'webpack';
 
 type EnvVariables = {}

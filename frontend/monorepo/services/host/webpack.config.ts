@@ -1,8 +1,6 @@
 import { buildWebpack, BuildOptions } from '@packages/build-config';
-import CopyPlugin from 'copy-webpack-plugin';
 import path from 'path';
 import webpack from 'webpack';
-import HtmlWebpackTagsPlugin from 'html-webpack-tags-plugin';
 
 type EnvVariables = {}
 
@@ -27,53 +25,12 @@ module.exports = (env: EnvVariables, argv: BuildOptions) => {
 
   if (!config.plugins) config.plugins = []
 
-  // Добавляем Module Federation
-  if (!isDev) {
-    config.plugins.push(
-      new CopyPlugin({
-           patterns: [
-               { from: path.resolve(paths.public, 'config'), to: path.resolve(paths.output, 'config') },
-           ],
-       })
-    )
-    config.plugins.push(
-      new HtmlWebpackTagsPlugin({
-        tags: [
-          'config/runtime-config.js'
-        ],
-        append: false
-      })
-    )
-  }
-
   config.plugins.push(
     new webpack.container.ModuleFederationPlugin({
       name: 'host',
       remotes: {
-        login: isDev ? 'login@http://localhost:3001/remoteEntry.js' : `promise new Promise(resolve => {
-        const url = window.__REMOTES__.login;
-        const script = document.createElement('script');
-        script.src = url;
-        script.onload = () => {
-          resolve({
-            get: window.login.get,
-            init: window.login.init
-          });
-        };
-        document.head.appendChild(script);
-      })`,
-        main: isDev ? 'main@http://localhost:3002/remoteEntry.js' : `promise new Promise(resolve => {
-        const url = window.__REMOTES__.main;
-        const script = document.createElement('script');
-        script.src = url;
-        script.onload = () => {
-          resolve({
-            get: window.main.get,
-            init: window.main.init
-          });
-        };
-        document.head.appendChild(script);
-      })`,
+        login: isDev ? 'login@http://localhost:3001/remoteEntry.js' : `login@https://localhost/login-mf/remoteEntry.js`,
+        main: isDev ? 'main@http://localhost:3002/remoteEntry.js' : `main@https://localhost/main-mf/remoteEntry.js`,
       },
       shared: {
         react: {

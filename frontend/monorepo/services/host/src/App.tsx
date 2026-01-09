@@ -1,10 +1,9 @@
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store, useAppSelector } from "@packages/shared";
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Loader, useAppSelector } from "@packages/shared";
 import React from 'react';
 import "./themes/default.css"
 import "./App.css"
-import { ErrorProvider } from '@packages/shared';
+import { validateReq } from './api/vaiidateReq';
 
 const LoginApp = React.lazy(() =>
   import('login/LoginApp').catch(() => ({
@@ -19,21 +18,20 @@ const MainApp = React.lazy(() =>
 );
 
 const App = () =>  {
-  const { token } = useAppSelector((state) => state.token);
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (token === '') {
-      navigate('/login');
-    }
-  }, [token, navigate]);
+    validateReq({
+      onUnauthorized: () => navigate('/login')
+    })
+  }, []);
 
   return (
     <Routes>
       <Route
         path="/login"
         element={
-          <React.Suspense fallback={<div>Loading Login...</div>}>
+          <React.Suspense fallback={<Loader text={"Loading Login..."}/>}>
             <LoginApp />
           </React.Suspense>
         }
@@ -41,7 +39,7 @@ const App = () =>  {
       <Route
         path="/*"
         element={
-          <React.Suspense fallback={<div>Loading Main App...</div>}>
+          <React.Suspense fallback={<Loader text={"Loading Main App..."}/>}>
             <MainApp />
           </React.Suspense>
         }

@@ -2,7 +2,6 @@ import { registerReq } from "./api/registerReq";
 import { loginReq } from "./api/loginReq";
 import LoginFormComponent from "../../components/loginForm/LoginForm"
 import { useNavigate } from "react-router-dom";
-import { setToken } from "@packages/shared";
 import { useAppDispatch } from "@packages/shared";
 import { useError } from "@packages/shared";
 
@@ -20,8 +19,7 @@ const LoginForm = () => {
                     registerReq(
                         login,
                         password,
-                        (token) => {
-                            dispatch(setToken({token: token}))
+                        () => {
                             navigate("/")
                         },
                         (descr) => showError(descr)
@@ -35,8 +33,7 @@ const LoginForm = () => {
                     loginReq(
                         login,
                         password,
-                        (token) => {
-                            dispatch(setToken({token: token}))
+                        () => {
                             navigate("/")
                         },
                         (descr) => showError(descr)

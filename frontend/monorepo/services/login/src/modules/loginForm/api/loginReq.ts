@@ -2,7 +2,7 @@ export const loginReq = (
     login: string,
     password: string,
 
-    onSuccess: (token: string) => void,
+    onSuccess: () => void,
     onError: (descr: string) => void = (e) => console.log(e)
 ) => {
     fetch('https://localhost/api/auth/login', {
@@ -18,13 +18,7 @@ export const loginReq = (
             }
             return response.json();
         })
-        .then(data => {
-            if (data && data.token) {
-                onSuccess(data.token);
-            } else {
-                onError('Сервер вернул некорректный ответ');
-            }
-        })
+        .then(() => onSuccess())
         .catch(error => {
             onError(`Неожиданная ошибка: ${error.message}`);
         });

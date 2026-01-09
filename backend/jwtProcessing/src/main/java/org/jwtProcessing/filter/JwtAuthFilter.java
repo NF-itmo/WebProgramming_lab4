@@ -2,6 +2,7 @@ package org.jwtProcessing.filter;
 
 import java.io.IOException;
 
+import jakarta.ws.rs.core.Cookie;
 import org.jwtProcessing.JwtVerifier;
 import org.jwtProcessing.security.JwtSecurityContext;
 import org.slf4j.Logger;
@@ -22,8 +23,8 @@ import jakarta.ws.rs.ext.Provider;
 @Priority(Priorities.AUTHENTICATION)
 public class JwtAuthFilter implements ContainerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
-    private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
+    private static final String COOKIE_NAME = "auth_token";
 
     private final JwtVerifier jwtVerifier;
 
@@ -34,19 +35,19 @@ public class JwtAuthFilter implements ContainerRequestFilter {
     }
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
-        String authHeader = requestContext.getHeaderString(AUTHORIZATION_HEADER);
+    public void filter(ContainerRequestContext requestContext) {
+        Cookie authCookie = requestContext.getCookies().get(COOKIE_NAME);
 
-        if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
-            logger.warn("Missing or invalid Authorization header");
+        if (authCookie == null || !authCookie.getValue().startsWith(BEARER_PREFIX)) {
+            logger.warn("Missing or invalid Authorization cookie");
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("{\"message\": \"Missing or invalid authorization header\"}")
+                    .entity("{\"message\": \"Missing or invalid authorization cookie\"}")
                     .build());
             return;
         }
 
         try {
-            String token = authHeader.substring(BEARER_PREFIX.length()).trim();
+            String token = authCookie.getValue().substring(BEARER_PREFIX.length()).trim();
             DecodedJWT decodedToken = jwtVerifier.verify(token);
 
             JwtSecurityContext securityContext = new JwtSecurityContext(

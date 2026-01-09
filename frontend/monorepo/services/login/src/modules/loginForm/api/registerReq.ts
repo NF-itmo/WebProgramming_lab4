@@ -2,7 +2,7 @@ export const registerReq = (
     login: string,
     password: string,
 
-    onSuccess: (token: string) => void,
+    onSuccess: () => void,
     onError: (descr: string) => void = (e) => console.log(e)
 ) => {
     fetch('https://localhost/api/auth/register', {
@@ -18,13 +18,7 @@ export const registerReq = (
             }
             return response.json();
         })
-        .then(data => {
-            if (data && data.token) {
-                onSuccess(data.token);
-            } else {
-                onError('Сервер вернул некорректный ответ');
-            }
-        })
+        .then(() => onSuccess())
         .catch(error => {
             onError(`Неожиданная ошибка: ${error.message}`);
         });

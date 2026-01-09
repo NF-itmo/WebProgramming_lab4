@@ -16,14 +16,24 @@
   ],
   "scripts": {
     "install-all": "npm install",
-    "start": "concurrently \"npm:start-host\" \"npm:start-login\" \"npm:start-main\"",
+
+    "start": "concurrently \"npm:start-host\" \"npm:start-login\" \"npm:start-main\" \"npm:start-plot\" \"npm:start-history\" \"npm:start-group\"",
+    "build": "npm run build-host && npm run build-login && npm run build-main && npm run build-plot && npm run build-history && npm run build-group",
+
     "start-host": "cd services/host && npm start",
     "start-login": "cd services/login && npm start",
     "start-main": "cd services/main && npm start",
-    "build": "npm run build-host && npm run build-login && npm run build-main",
+    "start-plot": "cd services/plot && npm start",
+    "start-history": "cd services/history && npm start",
+    "start-group": "cd services/group && npm start",
+
+    
     "build-host": "cd services/host && npm run build:prod",
     "build-login": "cd services/login && npm run build:prod",
-    "build-main": "cd services/main && npm run build:prod"
+    "build-main": "cd services/main && npm run build:prod",
+    "build-plot": "cd services/plot && npm run build:prod",
+    "build-history": "cd services/history && npm run build:prod",
+    "build-group": "cd services/group && npm run build:prod"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.28.5",
