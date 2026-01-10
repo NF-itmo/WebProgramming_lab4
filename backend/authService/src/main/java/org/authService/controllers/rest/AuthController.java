@@ -13,6 +13,7 @@ import org.authService.controllers.rest.DTO.ErrorResponse;
 import org.authService.controllers.rest.DTO.AuthResponse;
 import org.authService.services.exceptions.ConflictException;
 import org.authService.services.exceptions.UnauthorizedException;
+import org.csrfSecurity.CsrfProvider;
 import org.jwtProcessing.filter.JwtSecured;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class AuthController {
 
     @POST
     @Path("/login")
+    @CsrfProvider
     public Response login(@Valid AuthRequest request) {
         try {
             String token = authService.login(request.getLogin(), request.getPassword());
@@ -55,6 +57,7 @@ public class AuthController {
 
     @POST
     @Path("/register")
+    @CsrfProvider
     public Response register(@Valid AuthRequest request) {
         try {
             final String token = authService.register(request.getLogin(), request.getPassword());

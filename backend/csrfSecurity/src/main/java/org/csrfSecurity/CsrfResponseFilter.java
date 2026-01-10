@@ -11,7 +11,7 @@ import jakarta.ws.rs.ext.Provider;
 import java.util.UUID;
 
 @Provider
-@CsrfSecured
+@CsrfProvider
 @Priority(Priorities.AUTHENTICATION)
 public class CsrfResponseFilter implements ContainerResponseFilter {
     private static final String COOKIE_NAME = "csrf_token";
