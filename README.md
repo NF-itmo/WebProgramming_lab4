@@ -1,10 +1,5 @@
 # WebProgramming_lab4
 
-![Docker](https://img.shields.io/badge/docker-compose-blue?logo=docker)
-![React](https://img.shields.io/badge/react-19-61dafb?logo=react)
-![Redux](https://img.shields.io/badge/redux-toolkit-764abc?logo=redux)
-![Java](https://img.shields.io/badge/java-Jakarta_EE-red?logo=java)
-
 ## Overview
 Стек: React + Webpack Module Federation, Jakarta EE (JAX-RS), gRPC, Docker, JWT, CSRF, SAGA.
 
