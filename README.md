@@ -1,7 +1,7 @@
 # WebProgramming_lab4
 
 ## Overview
-Стек: React + Webpack Module Federation, Jakarta EE (JAX-RS).
+Стек: React + Webpack Module Federation, Jakarta EE (JAX-RS).\
 Технологии: gRPC, Docker, JWT, CSRF, SAGA.
 
 Проект представляет собой веб-приложение с микросервисной архитектурой и микрофронтендами,
